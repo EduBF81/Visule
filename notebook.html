@@ -1,0 +1,1436 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VisuLê - Caderno virtual de Alfabetização Acessível</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React e ReactDOM -->
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Fonte Comic Neue (para opção normal) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Fonte Cursive (para opção cursiva) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Patrick+Hand&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        background-color: #f0f9ff;
+        font-family: "Comic Neue", cursive, sans-serif;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      /* Opções de fonte */
+      .font-normal {
+        font-family: "Comic Neue", cursive, sans-serif;
+      }
+
+      .font-cursive {
+        font-family: "Patrick Hand", cursive;
+      }
+
+      /* Estilo simplificado para o caderno */
+      .simple-paper {
+        background-color: #ffffff;
+        background-image: linear-gradient(#e2e8f0 1px, transparent 1px);
+        background-size: 100% 2.5rem;
+        background-position: 0 1rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+
+      /* Pré-visualização dentro do caderno */
+      .preview-in-notebook {
+        background: rgba(219, 234, 254, 0.3);
+        border: 2px dashed #93c5fd;
+        border-radius: 12px;
+        margin: 8px 0;
+        position: relative;
+      }
+
+      .preview-label {
+        position: absolute;
+        top: -12px;
+        left: 20px;
+        background: #3b82f6;
+        color: white;
+        padding: 2px 12px;
+        border-radius: 10px;
+        font-size: 0.8rem;
+        font-weight: bold;
+      }
+
+      /* Teclado Virtual */
+      .virtual-keyboard {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border-radius: 20px;
+        box-shadow:
+          0 10px 25px -5px rgba(0, 0, 0, 0.1),
+          inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      }
+
+      .keyboard-key {
+        background: white;
+        border-radius: 12px;
+        box-shadow:
+          0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -1px rgba(0, 0, 0, 0.06),
+          inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        transition: all 0.1s ease;
+        user-select: none;
+      }
+
+      .keyboard-key:active {
+        transform: translateY(2px);
+        box-shadow:
+          0 2px 3px -1px rgba(0, 0, 0, 0.1),
+          inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      }
+
+      .keyboard-key-space {
+        background: linear-gradient(135deg, #c7d2fe 0%, #a5b4fc 100%);
+      }
+
+      /* Animações suaves */
+      .fade-in {
+        animation: fadeIn 0.3s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .bounce-subtle {
+        animation: bounceSubtle 1s infinite;
+      }
+
+      @keyframes bounceSubtle {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
+
+      /* Modal de dicas */
+      .help-modal {
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(10px);
+        border-radius: 24px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+      }
+
+      .help-modal-overlay {
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(4px);
+      }
+
+      /* Botões acessíveis */
+      .btn-simple {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        border-radius: 12px;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 0 #1e40af;
+      }
+
+      .btn-simple:active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 #1e40af;
+      }
+
+      .btn-secondary-simple {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border-radius: 12px;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 0 #047857;
+      }
+
+      .btn-secondary-simple:active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 #047857;
+      }
+
+      /* Foco visual para acessibilidade */
+      .focus-highlight:focus {
+        outline: 3px solid #3b82f6;
+        outline-offset: 2px;
+      }
+
+      /* Estilo para palavras com emojis */
+      .word-visual {
+        transition: all 0.3s ease;
+        border-radius: 8px;
+        padding: 4px 8px;
+      }
+
+      .word-visual:hover {
+        background-color: rgba(59, 130, 246, 0.1);
+      }
+
+      /* Scrollbar minimalista */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+    </style>
+  </head>
+  <body class="font-normal">
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState, useEffect, useRef } = React;
+
+      // --- 1. Dicionário de Palavras Expandido ---
+      const WORD_MAP = {
+        // ========== ANIMAIS ==========
+        // Animais domésticos
+        gato: "🐱",
+        cachorro: "🐶",
+        peixe: "🐟",
+        passaro: "🐦",
+        pato: "🦆",
+        coelho: "🐰",
+        hamster: "🐹",
+        tartaruga: "🐢",
+
+        // Animais da fazenda
+        vaca: "🐮",
+        galinha: "🐔",
+        galo: "🐓",
+        porco: "🐷",
+        ovelha: "🐑",
+        cavalo: "🐴",
+        cabra: "🐐",
+        burro: "🐴",
+
+        // Animais selvagens
+        leão: "🦁",
+        elefante: "🐘",
+        girafa: "🦒",
+        macaco: "🐵",
+        urso: "🐻",
+        lobo: "🐺",
+        raposa: "🦊",
+        zebra: "🦓",
+        panda: "🐼",
+        cobra: "🐍",
+        crocodilo: "🐊",
+
+        // Insetos
+        abelha: "🐝",
+        borboleta: "🦋",
+        formiga: "🐜",
+        joaninha: "🐞",
+        aranha: "🕷️",
+        lagarta: "🐛",
+        mosca: "🪰",
+
+        // ========== GENERO ==========
+
+        masculino: "♂️ 🔵",
+        feminino: "♀️ 🔴",
+
+        // ========== PESSOAS E FAMÍLIA ==========
+        eu: "🙋",
+        você: "👉",
+        mamãe: "👩",
+        mamae: "👩",
+        papai: "👨",
+        papai: "👨",
+        bebê: "👶",
+        bebe: "👶",
+        menino: "👦",
+        menina: "👧",
+        vovó: "👵",
+        vovo: "👵",
+        vovô: "👴",
+        vovo: "👴",
+        irmão: "👦",
+        irmao: "👦",
+        irmã: "👧",
+        irma: "👧",
+        tio: "👨",
+        tia: "👩",
+        primo: "👦",
+        prima: "👧",
+        amigo: "👦",
+        amiga: "👧",
+        professor: "👨‍🏫",
+        professora: "👩‍🏫",
+
+        // ========== PARTES DO CORPO ==========
+        cabeça: "🧠",
+        cabeca: "🧠",
+        olhos: "👀",
+        nariz: "👃",
+        boca: "👄",
+        ouvido: "👂",
+        mão: "✋",
+        mao: "✋",
+        pé: "🦶",
+        pe: "🦶",
+        braço: "💪",
+        braco: "💪",
+        perna: "🦵",
+        coração: "❤️",
+        coracao: "❤️",
+
+        // ========== OBJETOS ==========
+        // Casa
+        casa: "🏠",
+        porta: "🚪",
+        janela: "🪟",
+        cama: "🛏️",
+        mesa: "🪑",
+        cadeira: "🪑",
+        sofá: "🛋️",
+        sofa: "🛋️",
+        televisão: "📺",
+        televisao: "📺",
+        geladeira: "🧊",
+        fogão: "🔥",
+        fogao: "🔥",
+
+        // Escola
+        escola: "🏫",
+        livro: "📖",
+        caderno: "📓",
+        lápis: "✏️",
+        lapis: "✏️",
+        caneta: "🖊️",
+        borracha: "🧽",
+        régua: "📏",
+        regua: "📏",
+        mochila: "🎒",
+        quadro: "🖼️",
+
+        // Brinquedos
+        bola: "⚽",
+        bolas: "⚽⚽",
+        boneca: "👸",
+        carrinho: "🚗",
+        bloquinhos: "🧱",
+        quebra: "🧩",
+        cabeça: "🧸",
+        pião: "🪀",
+        pao: "🪀",
+
+        // Tecnologia
+        telefone: "📱",
+        computador: "💻",
+        tablet: "📱",
+        relógio: "⌚",
+        relogio: "⌚",
+        câmera: "📷",
+        camera: "📷",
+
+        // ========== NATUREZA ==========
+        sol: "☀️",
+        lua: "🌙",
+        estrela: "⭐",
+        nuvem: "☁️",
+        chuva: "🌧️",
+        neve: "❄️",
+        vento: "💨",
+        arco: "🌈",
+        íris: "🌈",
+        iris: "🌈",
+        flor: "🌸",
+        árvore: "🌳",
+        arvore: "🌳",
+        grama: "🌿",
+        folha: "🍃",
+        terra: "🟤",
+        pedra: "🪨",
+        montanha: "⛰️",
+
+        // ========== COMIDA E BEBIDA ==========
+        // Frutas
+        maçã: "🍎",
+        maca: "🍎",
+        banana: "🍌",
+        laranja: "🍊",
+        uva: "🍇",
+        morango: "🍓",
+        abacaxi: "🍍",
+        melancia: "🍉",
+        pera: "🍐",
+        limão: "🍋",
+        limao: "🍋",
+
+        // Vegetais
+        cenoura: "🥕",
+        batata: "🥔",
+        tomate: "🍅",
+        alface: "🥬",
+        brócolis: "🥦",
+        brocolis: "🥦",
+        milho: "🌽",
+        pepino: "🥒",
+
+        // Outros alimentos
+        pão: "🍞",
+        pao: "🍞",
+        bolo: "🎂",
+        biscoito: "🍪",
+        chocolate: "🍫",
+        sorvete: "🍦",
+        pipoca: "🍿",
+        queijo: "🧀",
+        ovo: "🥚",
+        carne: "🍖",
+        frango: "🍗",
+        peixe: "🐟",
+
+        // Bebidas
+        leite: "🥛",
+        água: "💧",
+        agua: "💧",
+        suco: "🧃",
+        café: "☕",
+        cafe: "☕",
+        chá: "🫖",
+        cha: "🫖",
+
+        // ========== VERBOS (AÇÕES) ==========
+        comer: "🍽️",
+        beber: "🥤",
+        dormir: "💤",
+        acordar: "⏰",
+        correr: "🏃",
+        andar: "🚶",
+        pular: "🦘",
+        saltar: "🤸",
+        nadar: "🏊",
+        voar: "🕊️",
+        sentar: "🪑",
+        levantar: "⬆️",
+        brincar: "🧸",
+        jogar: "🎮",
+        estudar: "📚",
+        ler: "📖",
+        escrever: "✍️",
+        desenhar: "🎨",
+        pintar: "🖌️",
+        cantar: "🎤",
+        dançar: "💃",
+        dancar: "💃",
+        ouvir: "👂",
+        falar: "🗣️",
+        ver: "👀",
+        rir: "😄",
+        chorar: "😢",
+        abraçar: "🤗",
+        abracar: "🤗",
+        beijar: "💋",
+        ajudar: "🤝",
+        trabalhar: "💼",
+        comprar: "🛒",
+        vender: "💰",
+        procurar: "🔍",
+        encontrar: "📍",
+        pegar: "🤲",
+        soltar: "🖐️ + ⬇️",
+        ir: "➡️",
+        vou: "➡️",
+        vim: "⬅️",
+
+        // ========== EMOÇÕES E SENTIMENTOS ==========
+        feliz: "😊",
+        alegre: "😄",
+        contente: "🙂",
+        triste: "😢",
+        bravo: "😠",
+        zangado: "😡",
+        medo: "😨",
+        assustado: "😰",
+        cansado: "😴",
+        sono: "😪",
+        amor: "❤️",
+        carinho: "🥰",
+        saudade: "😔",
+        vergonha: "😳",
+        surpresa: "😲",
+
+        // ========== CORES ==========
+        azul: "🔵",
+        vermelho: "🔴",
+        amarelo: "🟡",
+        verde: "🟢",
+        roxo: "🟣",
+        rosa: "💗",
+        laranja: "🟠",
+        marrom: "🟤",
+        marrom: "🟤",
+        preto: "⚫",
+        branco: "⚪",
+        cinza: "⚪",
+
+        // ========== NÚMEROS ==========
+        zero: "0️⃣",
+        um: "1️⃣",
+        dois: "2️⃣",
+        três: "3️⃣",
+        tres: "3️⃣",
+        quatro: "4️⃣",
+        cinco: "5️⃣",
+        seis: "6️⃣",
+        sete: "7️⃣",
+        oito: "8️⃣",
+        nove: "9️⃣",
+        dez: "🔟",
+
+        // ========== ARTIGOS E PRONOMES ==========
+        o: "🔵",
+        a: "🔴",
+        os: "🔵🔵",
+        as: "🔴🔴",
+        um: "1️⃣",
+        uma: "1️⃣",
+        uns: "🔢",
+        umas: "🔢",
+        meu: "🏷️",
+        minha: "🏷️",
+        teu: "🏷️",
+        tua: "🏷️",
+        esse: "👉",
+        essa: "👉",
+        este: "👈",
+        esta: "👈",
+
+        // ========== PREPOSIÇÕES E CONJUNÇÕES ==========
+        de: "⬇️",
+        em: "📍",
+        com: "➕",
+        sem: "➖",
+        para: "➡️",
+        por: "↗️",
+        entre: "↔️",
+        sobre: "⬆️",
+        sob: "⬇️",
+        e: "➕",
+        ou: "↔️",
+        mas: "🔄",
+        porque: "❓",
+        pois: "❗",
+
+        // ========== LUGARES ==========
+        parque: "🌳",
+        praia: "🏖️",
+        cidade: "🏙️",
+        campo: "🌾",
+        floresta: "🌲",
+        rio: "🌊",
+        mar: "🌊",
+        loja: "🏪",
+        mercado: "🛒",
+        hospital: "🏥",
+        igreja: "⛪",
+        cinema: "🎬",
+        teatro: "🎭",
+        circo: "🎪",
+        zoológico: "🐘",
+        zoologico: "🐘",
+
+        // ========== MEIOS DE TRANSPORTE ==========
+        carro: "🚗",
+        ônibus: "🚌",
+        onibus: "🚌",
+        bicicleta: "🚲",
+        moto: "🏍️",
+        avião: "✈️",
+        aviao: "✈️",
+        barco: "⛵",
+        navio: "🚢",
+        trem: "🚂",
+        metrô: "🚇",
+        metro: "🚇",
+        caminhão: "🚚",
+        caminhao: "🚚",
+
+        // ========== ROUPAS ==========
+        camisa: "👕",
+        calça: "👖",
+        calca: "👖",
+        vestido: "👗",
+        saia: "👗",
+        sapato: "👞",
+        tênis: "👟",
+        tenis: "👟",
+        meia: "🧦",
+        chapéu: "🧢",
+        chapeu: "🧢",
+        óculos: "👓",
+        oculos: "👓",
+        casaco: "🧥",
+        luvas: "🧤",
+
+        // ========== FORMAS E TAMANHOS ==========
+        grande: "🔺",
+        pequeno: "🔻",
+        alto: "⬆️",
+        baixo: "⬇️",
+        longo: "↔️",
+        curto: "↕️",
+        redondo: "⭕",
+        quadrado: "🟦",
+        triângulo: "🔺",
+        triangulo: "🔺",
+        círculo: "⭕",
+        circulo: "⭕",
+
+        // ========== TEMPO ==========
+        hoje: "📅",
+        ontem: "◀️",
+        amanhã: "▶️",
+        amanha: "▶️",
+        manhã: "🌅",
+        manha: "🌅",
+        tarde: "🌇",
+        noite: "🌃",
+        dia: "☀️",
+        semana: "📆",
+        mês: "🗓️",
+        mes: "🗓️",
+        ano: "🎉",
+        hora: "🕐",
+        minuto: "⏱️",
+
+        // ========== OUTRAS PALAVRAS ÚTEIS ==========
+        sim: "✅",
+        não: "❌",
+        nao: "❌",
+        obrigado: "🙏",
+        obrigada: "🙏",
+        por: "🫴",
+        favor: "🥺",
+        desculpa: "😔",
+        parabéns: "🎉",
+        parabens: "🎉",
+        cuidado: "⚠️",
+        atenção: "👀",
+        silêncio: "🤫",
+        silencio: "🤫",
+        rápido: "⚡",
+        rapido: "⚡",
+        devagar: "🐌",
+        fácil: "😊",
+        facil: "😊",
+        difícil: "😓",
+        dificil: "😓",
+        novo: "🆕",
+        nova: "🆕",
+        velho: "🕰️",
+        velha: "🕰️",
+        bonito: "✨",
+        bonita: "✨",
+        feio: "👹",
+        feia: "👹",
+        forte: "💪",
+        fraco: "🫣",
+        quente: "🔥",
+        frio: "❄️",
+        limpo: "✨",
+        sujo: "💩",
+        cheio: "🈵",
+        vazio: "🈳",
+      };
+
+      // --- 2. Dicionário de Frases Expandido ---
+      const PHRASE_MAP = {
+        // Cumprimentos
+        "bom dia": "🌅",
+        "boa tarde": "🌇",
+        "boa noite": "🌃",
+        "oi tudo bem": "👋",
+        "olá como vai": "👋",
+        "tudo bem": "👍",
+        "até logo": "👋",
+        "até amanhã": "👋",
+
+        // Expressões de afeto
+        "eu amo você": "❤️",
+        "eu te amo": "❤️",
+        "amo você": "❤️",
+        "te amo": "❤️",
+        "eu gosto de você": "😊",
+        "gosto de você": "😊",
+        "bem vindo": "🎉",
+        "bem vinda": "🎉",
+
+        // Ações cotidianas
+        "vamos brincar": "🧸",
+        "vamos jogar": "🎮",
+        "vamos estudar": "📚",
+        "vamos comer": "🍽️",
+        "vamos dormir": "💤",
+        "vamos passear": "🚶",
+        "vamos nadar": "🏊",
+        "vamos correr": "🏃",
+
+        // Frases escolares
+        "vou para escola": " 🚶 🎒 🏫 ",
+        "estou na escola": "🏫",
+        "voltei da escola": "🏠",
+        "fiz a lição": "📝",
+        "terminei a tarefa": "✅",
+        "preciso estudar": "📚",
+
+        // Pedidos e necessidades
+        "estou com fome": "🍽️",
+        "estou com sede": "🥤",
+        "estou cansado": "😴",
+        "estou com sono": "😪",
+        "estou feliz": "😊",
+        "estou triste": "😢",
+        "estou com medo": "😨",
+        "estou com calor": "🔥",
+        "estou com frio": "❄️",
+
+        // Animais
+        "gato e cachorro": "🐱🐶",
+        "cachorro e gato": "🐶🐱",
+        "vaca e galinha": "🐮🐔",
+        "cavalo e vaca": "🐴🐮",
+
+        // Família
+        "mamãe e papai": "👨‍👩‍👧",
+        "papai e mamãe": "👨‍👩‍👧",
+        "vovó e vovô": "👵👴",
+        "irmão e irmã": "👦👧",
+
+        // Perguntas simples
+        "onde está": "  ❓",
+        "o que é isso": "❓",
+        "como se chama": "❓",
+        "qual é seu nome": "❓",
+        "quantos anos": "❓",
+        "que horas são": "🕐",
+        "que dia é hoje": "📅",
+
+        // Expressões de ajuda
+        "me ajude": "🆘",
+        "preciso de ajuda": "🆘",
+        "pode me ajudar": "🤝",
+        "obrigado pela ajuda": "🙏",
+
+        // Cores
+        "azul e amarelo": "🔵🟡",
+        "vermelho e verde": "🔴🟢",
+        "roxo e rosa": "🟣💗",
+
+        // Números
+        "um dois três": "1️⃣2️⃣3️⃣",
+        "quatro cinco seis": "4️⃣5️⃣6️⃣",
+        "sete oito nove": "7️⃣8️⃣9️⃣",
+
+        // Tempo
+        "hoje é meu aniversário": "🎉",
+        "amanhã é domingo": "📅",
+        "ontem choveu": "🌧️",
+
+        // Jogos e brincadeiras
+        "vamos jogar bola": "⚽",
+        "vamos pular corda": "🔄",
+        "vamos desenhar": "🎨",
+        "vamos cantar": "🎤",
+
+        // Natureza
+        "sol e lua": "☀️🌙",
+        "dia e noite": "☀️🌙",
+        "chuva e sol": "🌧️☀️",
+
+        // Comida
+        "pão com queijo": "🍞🧀",
+        "arroz e feijão": "🍚🥣",
+        "suco e bolo": "🧃🎂",
+        "frutas e verduras": "🍎🥦",
+
+        // Transporte
+        "carro e bicicleta": "🚗🚲",
+        "ônibus e trem": "🚌🚂",
+        "avião e barco": "✈️⛵",
+
+        // Sentimentos combinados
+        "feliz e contente": "😊😄",
+        "triste e chorando": "😢😭",
+        "bravo e zangado": "😠😡",
+
+        // Lugares
+        "casa e escola": "🏠🏫",
+        "parque e praia": "🌳🏖️",
+        "cidade e campo": "🏙️🌾",
+
+        // Roupas
+        "camisa e calça": "👕👖",
+        "vestido e sapato": "👗👞",
+        "casaco e luvas": "🧥🧤",
+
+        // Tamanhos
+        "grande e pequeno": "🔺🔻",
+        "alto e baixo": "⬆️⬇️",
+        "longo e curto": "↔️↕️",
+
+        // Formas
+        "círculo e quadrado": "⭕🟦",
+        "triângulo e retângulo": "🔺🟦",
+
+        // Opostos
+        "quente e frio": "🔥❄️",
+        "limpo e sujo": "✨💩",
+        "cheio e vazio": "🈵🈳",
+        "rápido e devagar": "⚡🐌",
+        "fácil e difícil": "😊😓",
+        "novo e velho": "🆕🕰️",
+        "bonito e feio": "✨👹",
+        "forte e fraco": "💪🫣",
+        "sim e não": "✅❌",
+
+        // Expressões comuns
+        "por favor": "🥺",
+        "muito obrigado": "🙏",
+        "de nada": "😊",
+        "com licença": "🙇",
+        desculpe: "😔",
+        parabéns: "🎉",
+        cuidado: "⚠️",
+        atenção: "👀",
+        silêncio: "🤫",
+      };
+
+      // --- 3. Teclado Virtual ---
+      const KEYBOARD_LAYOUT = [
+        ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
+        ["a", "s", "d", "f", "g", "h", "j", "k", "l", "ç"],
+        ["z", "x", "c", "v", "b", "n", "m", ",", "."],
+        ["SPACE", "ENTER", "BACKSPACE"],
+      ];
+
+      // --- 4. Dicas e Exemplos ---
+      const HELP_EXAMPLES = {
+        "Palavras simples": ["gato", "casa", "sol", "bola", "mamãe"],
+        "Pequenas frases": ["eu amo você", "bom dia", "gato e cachorro"],
+        Ações: ["correr", "brincar", "comer", "dormir"],
+        "Cores e números": ["azul", "vermelho", "um", "dois", "três"],
+        Sentimentos: ["feliz", "amor", "sorriso"],
+      };
+
+      const cleanText = (text) => {
+        return text
+          .toLowerCase()
+          .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")
+          .trim()
+          .replace(/\s\s+/g, " ");
+      };
+
+      const getPhraseResult = (cleanedInput) => {
+        let bestEmoji = null;
+        let bestLen = 0;
+        for (const [phrase, emoji] of Object.entries(PHRASE_MAP)) {
+          if (cleanedInput.includes(phrase)) {
+            if (phrase.length > bestLen) {
+              bestLen = phrase.length;
+              bestEmoji = emoji;
+            }
+          }
+        }
+        return bestEmoji;
+      };
+
+      // --- 5. Componentes Visuais Simplificados ---
+      const WordBlock = ({ rawWord, fontStyle }) => {
+        const cleaned = cleanText(rawWord);
+        const icon = WORD_MAP[cleaned] || null;
+        return (
+          <div
+            className={`word-visual inline-flex flex-col items-center mx-1 px-1 min-w-[40px] ${fontStyle}`}
+          >
+            <div className="h-14 flex items-end justify-center mb-1">
+              {icon ? (
+                <span className="text-5xl leading-none filter drop-shadow-sm bounce-subtle">
+                  {icon}
+                </span>
+              ) : (
+                <span className="text-5xl leading-none opacity-0">•</span>
+              )}
+            </div>
+            <span className="block text-3xl font-bold text-slate-800 tracking-wide h-12 flex items-center justify-center">
+              {rawWord}
+            </span>
+          </div>
+        );
+      };
+
+      const SimplePhraseBlock = ({
+        fullText,
+        resultEmoji,
+        fontStyle,
+        isPreview = false,
+      }) => {
+        const words = fullText.split(/(\s+)/);
+        return (
+          <div
+            className={`flex flex-wrap items-center px-4 py-3 bg-white rounded-xl border border-blue-100 mb-3 fade-in ${isPreview ? "preview-in-notebook" : ""}`}
+          >
+            {isPreview && <div className="preview-label">PRÉ-VISUALIZAÇÃO</div>}
+            <div className="flex flex-wrap items-center mr-2">
+              {words.map((seg, index) => {
+                if (seg.match(/\s+/))
+                  return (
+                    <span
+                      key={index}
+                      className={`inline-block h-12 leading-[3rem] whitespace-pre text-3xl ${fontStyle}`}
+                    >
+                      {seg}
+                    </span>
+                  );
+                return (
+                  <WordBlock key={index} rawWord={seg} fontStyle={fontStyle} />
+                );
+              })}
+            </div>
+            {resultEmoji && (
+              <div className="flex items-center h-12 ml-auto pl-4 border-l border-blue-100">
+                <span
+                  className={`text-3xl text-blue-500 font-black mx-2 ${fontStyle}`}
+                >
+                  =
+                </span>
+                <span className="text-5xl filter drop-shadow-md">
+                  {resultEmoji}
+                </span>
+              </div>
+            )}
+          </div>
+        );
+      };
+
+      // --- 6. Componente do Teclado Virtual ---
+      const VirtualKeyboard = ({ onKeyPress, fontStyle, onHideKeyboard }) => {
+        const handleKeyClick = (key) => {
+          if (key === "SPACE") {
+            onKeyPress(" ");
+          } else if (key === "ENTER") {
+            onKeyPress("\n");
+          } else if (key === "BACKSPACE") {
+            onKeyPress("backspace");
+          } else {
+            onKeyPress(key);
+          }
+        };
+
+        return (
+          <div className="virtual-keyboard p-4 mb-4 fade-in">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className={`text-xl font-bold text-slate-700 ${fontStyle}`}>
+                Teclado Virtual
+              </h3>
+              <div className="flex items-center gap-2">
+                <div className="text-sm text-slate-500">Toque nas letras</div>
+                <button
+                  onClick={onHideKeyboard}
+                  className="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-lg font-bold hover:bg-blue-200 transition"
+                >
+                  Usar Teclado Físico
+                </button>
+              </div>
+            </div>
+
+            {KEYBOARD_LAYOUT.map((row, rowIndex) => (
+              <div key={rowIndex} className="flex justify-center mb-2">
+                {row.map((key, keyIndex) => (
+                  <button
+                    key={keyIndex}
+                    onClick={() => handleKeyClick(key)}
+                    className={`
+                      keyboard-key mx-1 px-3 py-4 text-xl font-bold
+                      ${fontStyle}
+                      ${
+                        key === "SPACE"
+                          ? "keyboard-key-space flex-1 max-w-[200px]"
+                          : key === "ENTER"
+                            ? "bg-green-100 text-green-800"
+                            : key === "BACKSPACE"
+                              ? "bg-red-100 text-red-800"
+                              : "text-slate-700"
+                      }
+                    `}
+                    style={{
+                      minWidth:
+                        key === "SPACE"
+                          ? "200px"
+                          : key === "ENTER" || key === "BACKSPACE"
+                            ? "80px"
+                            : "44px",
+                    }}
+                  >
+                    {key === "SPACE"
+                      ? "ESPAÇO"
+                      : key === "ENTER"
+                        ? "↵"
+                        : key === "BACKSPACE"
+                          ? "⌫"
+                          : key.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+            ))}
+
+            <div className="text-center text-sm text-slate-500 mt-3">
+              Digite usando o teclado virtual. Toque nas letras para formar
+              palavras.
+            </div>
+          </div>
+        );
+      };
+
+      // --- 7. Modal de Ajuda ---
+      const HelpModal = ({ isOpen, onClose, onSelectExample, fontStyle }) => {
+        if (!isOpen) return null;
+
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 help-modal-overlay">
+            <div className="help-modal w-full max-w-2xl max-h-[80vh] overflow-y-auto p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h3
+                  className={`text-2xl font-bold text-slate-800 ${fontStyle}`}
+                >
+                  📚 Dicas e Exemplos
+                </h3>
+                <button
+                  onClick={onClose}
+                  className="text-3xl text-slate-500 hover:text-slate-700 focus-highlight"
+                  aria-label="Fechar"
+                >
+                  ×
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                {Object.entries(HELP_EXAMPLES).map(
+                  ([category, examples], index) => (
+                    <div key={index} className="bg-blue-50 rounded-xl p-4">
+                      <h4
+                        className={`text-lg font-bold text-blue-800 mb-3 ${fontStyle}`}
+                      >
+                        {category}
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {examples.map((example, exampleIndex) => (
+                          <button
+                            key={exampleIndex}
+                            onClick={() => onSelectExample(example)}
+                            className={`bg-white hover:bg-blue-100 text-blue-700 px-4 py-2 rounded-lg transition ${fontStyle} focus-highlight`}
+                          >
+                            {example}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ),
+                )}
+
+                <div className="bg-amber-50 rounded-xl p-4">
+                  <h4
+                    className={`text-lg font-bold text-amber-800 mb-2 ${fontStyle}`}
+                  >
+                    💡 Como usar
+                  </h4>
+                  <ul className={`space-y-2 text-amber-700 ${fontStyle}`}>
+                    <li>
+                      • Digite uma palavra para ver o emoji correspondente
+                    </li>
+                    <li>
+                      • Use o teclado virtual se não souber usar o teclado
+                      físico
+                    </li>
+                    <li>• Toque em qualquer exemplo acima para testar</li>
+                    <li>
+                      • Pressione ENTER ou toque no botão verde para adicionar
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-6 text-center">
+                <button
+                  onClick={onClose}
+                  className="btn-simple text-white px-6 py-3 font-bold"
+                >
+                  Entendi, vamos começar!
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      // --- 8. Aplicação Principal Simplificada ---
+      const App = () => {
+        const [history, setHistory] = useState([]);
+        const [inputText, setInputText] = useState("");
+        const [showKeyboard, setShowKeyboard] = useState(false);
+        const [fontStyle, setFontStyle] = useState("font-normal");
+        const [showHelp, setShowHelp] = useState(false);
+        const inputRef = useRef(null);
+        const mainRef = useRef(null);
+
+        const processLine = (text) => {
+          const cleaned = cleanText(text);
+          const emoji = getPhraseResult(cleaned) || WORD_MAP[cleaned] || null;
+          return { raw: text, emoji };
+        };
+
+        useEffect(() => {
+          if (mainRef.current) {
+            mainRef.current.scrollTop = mainRef.current.scrollHeight;
+          }
+        }, [history, inputText]);
+
+        useEffect(() => {
+          // Mostrar ajuda na primeira vez
+          const hasSeenHelp = localStorage.getItem("visule_has_seen_help");
+          if (!hasSeenHelp) {
+            setTimeout(() => {
+              setShowHelp(true);
+              localStorage.setItem("visule_has_seen_help", "true");
+            }, 1000);
+          }
+        }, []);
+
+        const handleKeyDown = (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            addCurrentText();
+          }
+        };
+
+        const addCurrentText = () => {
+          if (inputText.trim() === "") return;
+          const processed = processLine(inputText);
+          setHistory((prev) => [...prev, processed]);
+          setInputText("");
+          if (!showKeyboard) {
+            inputRef.current.focus();
+          }
+        };
+
+        const handleKeyboardKey = (key) => {
+          if (key === "backspace") {
+            setInputText((prev) => prev.slice(0, -1));
+          } else if (key === "\n") {
+            addCurrentText();
+          } else {
+            setInputText((prev) => prev + key);
+          }
+        };
+
+        const handleClear = () => {
+          setHistory([]);
+          setInputText("");
+          if (!showKeyboard) {
+            inputRef.current.focus();
+          }
+        };
+
+        const handleExampleSelect = (example) => {
+          setInputText(example);
+          setShowHelp(false);
+          if (!showKeyboard) {
+            inputRef.current.focus();
+          }
+        };
+
+        const toggleKeyboard = () => {
+          const newShowKeyboard = !showKeyboard;
+          setShowKeyboard(newShowKeyboard);
+
+          // Se estiver mostrando o teclado virtual, focar em algo útil
+          if (newShowKeyboard) {
+            // Aqui poderíamos focar no primeiro botão do teclado se necessário
+          } else {
+            // Se estiver voltando para o teclado físico, focar no textarea
+            setTimeout(() => {
+              inputRef.current.focus();
+            }, 100);
+          }
+        };
+
+        return (
+          <div
+            className={`min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-white ${fontStyle}`}
+          >
+            {/* Cabeçalho Minimalista */}
+            <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-blue-100">
+              <div className="container mx-auto px-4 py-3">
+                <div className="flex flex-col sm:flex-row justify-between items-center">
+                  <div className="flex items-center gap-3">
+                    <div class="w-16 h-16 rounded-xl flex items-center justify-center shadow-md mr-3 overflow-hidden">
+                      <a href="index.html" class="w-full h-full flex items-center justify-center">
+                      <img
+                        src="img/logo-visule.png"
+                        alt="Logo VisuLê"
+                        class="w-full h-full object-cover" 
+                        
+                      />
+                      </a>
+
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => setShowHelp(true)}
+                      className="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-bold hover:bg-blue-200 transition focus-highlight"
+                    >
+                      📚 Ajuda
+                    </button>
+
+                    <div className="flex border border-blue-200 rounded-lg overflow-hidden">
+                      <button
+                        onClick={() => setFontStyle("font-normal")}
+                        className={`px-3 py-2 ${fontStyle === "font-normal" ? "bg-blue-500 text-white" : "bg-white text-blue-700"}`}
+                      >
+                        Aa
+                      </button>
+                      <button
+                        onClick={() => setFontStyle("font-cursive")}
+                        className={`px-3 py-2 ${fontStyle === "font-cursive" ? "bg-blue-500 text-white" : "bg-white text-blue-700"}`}
+                      >
+                        𝒜𝒶
+                      </button>
+                    </div>
+
+                    <button
+                      onClick={toggleKeyboard}
+                      className={`px-4 py-2 rounded-lg font-bold focus-highlight ${
+                        showKeyboard
+                          ? "bg-purple-500 text-white"
+                          : "bg-white text-purple-700 border border-purple-200"
+                      }`}
+                    >
+                      {showKeyboard
+                        ? "⌨️ Voltar para Teclado Físico"
+                        : "⌨️ Usar Teclado Virtual"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </header>
+
+            {/* Conteúdo Principal */}
+            <main className="flex-1 container mx-auto px-4 py-6 max-w-4xl">
+              {/* Área de Visualização com Pré-visualização */}
+              <div className="mb-8">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-2xl font-bold text-slate-800">
+                    📓 Caderno de Palavras e Frases
+                  </h2>
+                  <div className="text-slate-600">
+                    {history.length} {history.length === 1 ? "item" : "itens"}
+                  </div>
+                </div>
+
+                <div
+                  ref={mainRef}
+                  className="simple-paper w-full rounded-2xl p-6 min-h-[300px] max-h-[50vh] overflow-y-auto"
+                >
+                  {history.length === 0 && !inputText ? (
+                    <div className="h-full flex flex-col items-center justify-center text-center py-12">
+                      <div className="text-5xl mb-6">📝</div>
+                      <p className="text-2xl font-bold text-slate-700 mb-3">
+                        {showKeyboard
+                          ? "Use o teclado virtual abaixo"
+                          : "Seu caderno está vazio"}
+                      </p>
+                      <p className="text-slate-600 text-lg max-w-md">
+                        {showKeyboard
+                          ? "Toque nas letras para formar palavras e ver os emojis!"
+                          : "Escreva palavras abaixo para começar!"}
+                      </p>
+                      {!showKeyboard && (
+                        <button
+                          onClick={() => setShowHelp(true)}
+                          className="mt-6 px-6 py-3 bg-blue-100 text-blue-700 rounded-xl font-bold hover:bg-blue-200 transition focus-highlight"
+                        >
+                          📚 Ver Exemplos
+                        </button>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {/* Histórico */}
+                      {history.map((line, idx) =>
+                        line.emoji ? (
+                          <SimplePhraseBlock
+                            key={idx}
+                            fullText={line.raw}
+                            resultEmoji={line.emoji}
+                            fontStyle={fontStyle}
+                          />
+                        ) : (
+                          <div
+                            key={idx}
+                            className="bg-white p-4 rounded-xl border border-blue-100 mb-3"
+                          >
+                            <div className="flex flex-wrap items-center">
+                              {line.raw.split(/(\s+)/).map((seg, segIdx) => {
+                                if (seg.match(/\s+/))
+                                  return (
+                                    <span
+                                      key={segIdx}
+                                      className="whitespace-pre text-3xl"
+                                    >
+                                      {seg}
+                                    </span>
+                                  );
+                                return (
+                                  <WordBlock
+                                    key={segIdx}
+                                    rawWord={seg}
+                                    fontStyle={fontStyle}
+                                  />
+                                );
+                              })}
+                            </div>
+                          </div>
+                        ),
+                      )}
+
+                      {/* Pré-visualização dentro do caderno */}
+                      {inputText && (
+                        <SimplePhraseBlock
+                          fullText={inputText}
+                          resultEmoji={processLine(inputText).emoji}
+                          fontStyle={fontStyle}
+                          isPreview={true}
+                        />
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Área de Entrada Simplificada (APENAS quando NÃO estiver mostrando teclado virtual) */}
+              {!showKeyboard && (
+                <div className="mb-6 fade-in">
+                  <div className="relative bg-white rounded-2xl p-1 shadow-sm border border-blue-100">
+                    <div className="p-4">
+                      <label className="block text-lg font-bold text-slate-700 mb-3">
+                        ✏️ Escreva uma palavra ou frase:
+                      </label>
+                      <textarea
+                        ref={inputRef}
+                        value={inputText}
+                        onChange={(e) => setInputText(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        placeholder="Comece a digitar aqui..."
+                        className={`w-full p-4 bg-blue-50 rounded-xl border border-blue-200 
+                                  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                                  text-2xl resize-none ${fontStyle}`}
+                        rows="2"
+                        style={{ minHeight: "120px" }}
+                      />
+
+                      <div className="flex flex-wrap gap-3 mt-4">
+                        <button
+                          onClick={addCurrentText}
+                          disabled={!inputText.trim()}
+                          className="btn-secondary-simple text-white px-6 py-3 font-bold disabled:opacity-50 disabled:cursor-not-allowed focus-highlight"
+                        >
+                          ✅ Adicionar ao Caderno
+                        </button>
+
+                        <button
+                          onClick={handleClear}
+                          className="px-6 py-3 bg-slate-100 text-slate-700 rounded-lg font-bold hover:bg-slate-200 transition focus-highlight"
+                        >
+                          🗑️ Limpar Tudo
+                        </button>
+
+                        <div className="ml-auto flex items-center">
+                          <div className="text-sm text-slate-500">
+                            Pressione <span className="font-bold">ENTER</span>{" "}
+                            para adicionar
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Teclado Virtual (APENAS quando estiver mostrando teclado virtual) */}
+              {showKeyboard && (
+                <VirtualKeyboard
+                  onKeyPress={handleKeyboardKey}
+                  fontStyle={fontStyle}
+                  onHideKeyboard={toggleKeyboard}
+                />
+              )}
+            </main>
+
+            {/* Rodapé Simplificado */}
+            <footer className="bg-slate-800 text-white py-6">
+              <div className="container mx-auto px-4 text-center">
+                <div className="flex flex-col md:flex-row justify-between items-center mb-4">                 
+                </div>
+                <div className="text-slate-400 text-sm">
+                  © 2026 - Caderno de Alfabetização virtual |  Desenvolvido para crianças, jovens e adultos em processo de alfabetização.
+                </div>
+                
+              </div>
+            </footer>
+
+            {/* Modal de Ajuda */}
+            <HelpModal
+              isOpen={showHelp}
+              onClose={() => setShowHelp(false)}
+              onSelectExample={handleExampleSelect}
+              fontStyle={fontStyle}
+            />
+          </div>
+        );
+      };
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
