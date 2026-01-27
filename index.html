@@ -1,0 +1,1135 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VisuLê - Alfabetização Visual para Todas as Idades</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonte Comic Neue -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: "Comic Neue", cursive, sans-serif;
+        background-color: #eff6ff;
+        background-image: radial-gradient(#dbeafe 2px, transparent 2px);
+        background-size: 20px 20px;
+      }
+
+      .hero-gradient {
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      }
+
+      .section-card {
+        background-color: white;
+        border-radius: 24px;
+        box-shadow:
+          0 10px 25px -5px rgba(0, 0, 0, 0.1),
+          0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .section-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .emoji-float {
+        animation: float 6s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-15px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      .emoji-bounce {
+        animation: bounce 2s infinite;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        box-shadow: 0 4px 0 0 rgba(79, 70, 229, 0.4);
+        transition: all 0.2s ease;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 0 0 rgba(79, 70, 229, 0.4);
+      }
+
+      .btn-primary:active {
+        transform: translateY(1px);
+        box-shadow: 0 2px 0 0 rgba(79, 70, 229, 0.4);
+      }
+
+      .btn-secondary {
+        background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        box-shadow: 0 4px 0 0 rgba(16, 185, 129, 0.4);
+        transition: all 0.2s ease;
+      }
+
+      .btn-secondary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 0 0 rgba(16, 185, 129, 0.4);
+      }
+
+      .btn-secondary:active {
+        transform: translateY(1px);
+        box-shadow: 0 2px 0 0 rgba(16, 185, 129, 0.4);
+      }
+
+      .highlight-word {
+        background: linear-gradient(120deg, #fef3c7 0%, #fef3c7 100%);
+        background-repeat: no-repeat;
+        background-size: 100% 40%;
+        background-position: 0 88%;
+        padding: 0 4px;
+      }
+
+      .age-group-card {
+        border-radius: 20px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .age-group-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 8px;
+      }
+
+      .kids-card::before {
+        background: linear-gradient(90deg, #f472b6 0%, #fb7185 100%);
+      }
+
+      .teens-card::before {
+        background: linear-gradient(90deg, #60a5fa 0%, #3b82f6 100%);
+      }
+
+      .adults-card::before {
+        background: linear-gradient(90deg, #34d399 0%, #10b981 100%);
+      }
+
+      .testimonial-card {
+        background-color: white;
+        border-radius: 20px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        position: relative;
+        border-top: 8px solid;
+      }
+
+      .testimonial-card::before {
+        content: "❝";
+        font-size: 60px;
+        position: absolute;
+        top: -30px;
+        left: 20px;
+        color: #c7d2fe;
+        opacity: 0.7;
+      }
+    </style>
+    <!-- Estilos adicionais para o navbar -->
+    <style>
+      .btn-primary {
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        box-shadow: 0 6px 0 0 rgba(79, 70, 229, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 0 0 rgba(79, 70, 229, 0.3);
+      }
+
+      .btn-primary:active {
+        transform: translateY(1px);
+        box-shadow: 0 4px 0 0 rgba(79, 70, 229, 0.3);
+      }
+
+      #mobile-menu {
+        animation: slideDown 0.3s ease-out;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      #mobile-menu-button span {
+        transition: all 0.3s ease;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Cabeçalho/Navegação -->
+    <header
+      class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-indigo-100"
+    >
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <!-- Logo VisuLê com imagem (versão simples) -->
+            <div
+              class="w-16 h-16 rounded-xl flex items-center justify-center shadow-md mr-3 overflow-hidden"
+            >
+              <img
+                src="img/logo-visule.png"
+                alt="Logo VisuLê"
+                class="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+
+          <nav class="hidden md:flex gap-6">
+            <a
+              href="#sobre"
+              class="text-indigo-700 font-bold hover:text-indigo-500 transition"
+              >Sobre</a
+            >
+            <a
+              href="#como-funciona"
+              class="text-indigo-700 font-bold hover:text-indigo-500 transition"
+              >Como Funciona</a
+            >
+            <a
+              href="#para-quem"
+              class="text-indigo-700 font-bold hover:text-indigo-500 transition"
+              >Para Quem</a
+            >
+            <a
+              href="notebook.html"
+              class="text-indigo-700 font-bold hover:text-indigo-500 transition"
+              >Caderno virtural</a
+            >
+          </nav>
+
+          <a
+            href="notebook.html"
+            class="btn-primary text-white font-bold px-6 py-3 rounded-full"
+          >
+            Usar Caderno
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Seção Hero -->
+    <section class="hero-gradient text-white py-12 md:py-20">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center">
+          <div class="md:w-1/2 mb-10 md:mb-0">
+            <div
+              class="inline-flex items-center gap-2 bg-white/20 rounded-full px-4 py-2 mb-6"
+            >
+              <span class="emoji-bounce text-xl">🎉</span>
+              <span class="font-bold">UMA NOVA FORMA DE ALFABETIZAR</span>
+            </div>
+
+            <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight">
+              Aprender a ler é
+              <span class="text-yellow-300">divertido</span> com o VisuLê!
+            </h1>
+
+            <p class="text-xl mb-8 text-indigo-100">
+              Um Caderno visual inovadora que transforma palavras em emojis e
+              imagens, ajudando crianças, adolescentes e adultos a aprenderem de
+              forma lúdica e eficaz.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4">
+              <a
+                href="notebook.html"
+                class="btn-secondary text-white font-bold px-8 py-4 rounded-full text-center text-lg"
+              >
+                🚀 Experimente Agora
+              </a>
+              <a
+                href="#como-funciona"
+                class="bg-white/20 hover:bg-white/30 text-white font-bold px-8 py-4 rounded-full text-center text-lg transition"
+              >
+                📖 Saiba Mais
+              </a>
+            </div>
+
+            <div class="mt-10 flex items-center gap-4 text-indigo-100">
+              <div class="flex">
+                <div
+                  class="w-10 h-10 rounded-full border-2 border-white flex items-center justify-center bg-indigo-500 -ml-2 first:ml-0"
+                >
+                  👦
+                </div>
+                <div
+                  class="w-10 h-10 rounded-full border-2 border-white flex items-center justify-center bg-purple-500 -ml-2"
+                >
+                  👧
+                </div>
+                <div
+                  class="w-10 h-10 rounded-full border-2 border-white flex items-center justify-center bg-pink-500 -ml-2"
+                >
+                  🧑
+                </div>
+                <div
+                  class="w-10 h-10 rounded-full border-2 border-white flex items-center justify-center bg-indigo-600 -ml-2"
+                >
+                  👨
+                </div>
+              </div>
+              <p class="font-bold">
+                +2.000 pessoas já estão usando e aprendendo com o VisuLê!
+              </p>
+            </div>
+          </div>
+
+          <div class="md:w-1/2 flex justify-center">
+            <div class="relative">
+              <div class="section-card p-6 max-w-md">
+                <div class="flex items-center mb-4">
+                  <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 flex items-center justify-center text-white font-bold mr-3"
+                  >
+                    VL
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-gray-800">
+                      Demonstração do Caderno
+                    </h3>
+                    <p class="text-gray-500 text-sm">
+                      Digite uma frase e veja a mágica acontecer!
+                    </p>
+                  </div>
+                </div>
+
+                <div class="bg-gray-50 rounded-xl p-4 mb-4">
+                  <div class="flex flex-wrap items-end mb-2">
+                    <div class="flex flex-col items-center mx-1">
+                      <span class="text-3xl">🐱</span>
+                      <span class="text-gray-700 font-bold">gato</span>
+                    </div>
+                    <span class="text-2xl mx-1">+</span>
+                    <div class="flex flex-col items-center mx-1">
+                      <span class="text-3xl">🐶</span>
+                      <span class="text-gray-700 font-bold">cachorro</span>
+                    </div>
+                    <span class="text-2xl mx-1">+</span>
+                    <div class="flex flex-col items-center mx-1">
+                      <span class="text-3xl">🏠</span>
+                      <span class="text-gray-700 font-bold">casa</span>
+                    </div>
+                  </div>
+
+                  <div class="text-center py-2">
+                    <span class="text-2xl font-bold text-indigo-600">=</span>
+                  </div>
+
+                  <div class="text-center">
+                    <span class="text-5xl">🐱 🐶 🏠</span>
+                    <p class="text-gray-600 text-sm mt-2">
+                      Frase visualizada com emojis
+                    </p>
+                  </div>
+                </div>
+
+                <div class="text-center">
+                  <p class="text-gray-700 mb-2 font-bold">
+                    Experimente frases como:
+                  </p>
+                  <div class="flex flex-wrap justify-center gap-2">
+                    <span
+                      class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm"
+                      >eu amo você</span
+                    >
+                    <span
+                      class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm"
+                      >gato e cachorro</span
+                    >
+                    <span
+                      class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm"
+                      >vou para escola</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="absolute -top-4 -right-4 emoji-float">
+                <span class="text-6xl">🌟</span>
+              </div>
+              <div
+                class="absolute -bottom-4 -left-4 emoji-float"
+                style="animation-delay: 2s"
+              >
+                <span class="text-5xl">🎨</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção Sobre -->
+    <section id="sobre" class="py-16 bg-gradient-to-b from-white to-indigo-50">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-black text-indigo-800 mb-4">
+            O que é o <span class="highlight-word">VisuLê</span>?
+          </h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            Uma plataforma inovadora de alfabetização visual que transforma
+            palavras e frases em emojis, ajudando no processo de aprendizagem da
+            leitura e escrita de forma lúdica e acessível.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="section-card p-8">
+            <div class="text-5xl mb-6 text-center">👁️</div>
+            <h3 class="text-2xl font-black text-indigo-700 mb-4 text-center">
+              Aprendizado Visual
+            </h3>
+            <p class="text-gray-600">
+              Utilizamos a associação visual entre palavras e emojis para
+              facilitar a compreensão e memorização do significado das palavras,
+              especialmente útil para aprendizes visuais.
+            </p>
+          </div>
+
+          <div class="section-card p-8">
+            <div class="text-5xl mb-6 text-center">🎮</div>
+            <h3 class="text-2xl font-black text-indigo-700 mb-4 text-center">
+              Abordagem Lúdica
+            </h3>
+            <p class="text-gray-600">
+              Transformamos o processo de alfabetização em uma experiência
+              divertida, reduzindo a ansiedade e aumentando o engajamento de
+              crianças, adolescentes e adultos.
+            </p>
+          </div>
+
+          <div class="section-card p-8">
+            <div class="text-5xl mb-6 text-center">🧠</div>
+            <h3 class="text-2xl font-black text-indigo-700 mb-4 text-center">
+              Para Todas as Idades
+            </h3>
+            <p class="text-gray-600">
+              Desenvolvido com múltiplas abordagens pedagógicas para atender
+              diferentes faixas etárias e níveis de alfabetização, desde
+              crianças em fase inicial até adultos aprendendo a ler.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção Como Funciona -->
+    <section id="como-funciona" class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-black text-indigo-800 mb-4">
+            Como <span class="highlight-word">Funciona</span>?
+          </h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            Simples, intuitivo e eficaz. Veja como o VisuLê pode transformar o
+            aprendizado da leitura.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-4 gap-8 mb-12">
+          <div class="text-center">
+            <div
+              class="w-20 h-20 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 flex items-center justify-center text-white text-3xl font-black mx-auto mb-4 shadow-lg"
+            >
+              1
+            </div>
+            <h3 class="text-xl font-black text-gray-800 mb-2">
+              Digite uma Palavra
+            </h3>
+            <p class="text-gray-600">
+              Escreva uma palavra ou frase no caderno.
+            </p>
+          </div>
+
+          <div class="text-center">
+            <div
+              class="w-20 h-20 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white text-3xl font-black mx-auto mb-4 shadow-lg"
+            >
+              2
+            </div>
+            <h3 class="text-xl font-black text-gray-800 mb-2">
+              Veja a Transformação
+            </h3>
+            <p class="text-gray-600">
+              A palavra é automaticamente convertida em emojis correspondentes.
+            </p>
+          </div>
+
+          <div class="text-center">
+            <div
+              class="w-20 h-20 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center text-white text-3xl font-black mx-auto mb-4 shadow-lg"
+            >
+              3
+            </div>
+            <h3 class="text-xl font-black text-gray-800 mb-2">
+              Associe os Conceitos
+            </h3>
+            <p class="text-gray-600">
+              Relacione a palavra escrita com sua representação visual.
+            </p>
+          </div>
+
+          <div class="text-center">
+            <div
+              class="w-20 h-20 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 flex items-center justify-center text-white text-3xl font-black mx-auto mb-4 shadow-lg"
+            >
+              4
+            </div>
+            <h3 class="text-xl font-black text-gray-800 mb-2">
+              Memorize e Aprenda
+            </h3>
+            <p class="text-gray-600">
+              A repetição visual ajuda na memorização e compreensão.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-3xl p-8 md:p-12"
+        >
+          <div class="flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-8 md:mb-0">
+              <h3 class="text-3xl font-black text-indigo-800 mb-4">
+                Experimente você mesmo!
+              </h3>
+              <p class="text-gray-700 mb-6">
+                O VisuLê já possui um extenso dicionário visual com centenas de
+                palavras e frases mapeadas para emojis. Desde objetos simples
+                até verbos e expressões completas.
+              </p>
+              <ul class="space-y-3">
+                <li class="flex items-center">
+                  <span class="text-green-500 text-xl mr-2">✓</span>
+                  <span class="font-bold"
+                    >+300 palavras do vocabulário básico</span
+                  >
+                </li>
+                <li class="flex items-center">
+                  <span class="text-green-500 text-xl mr-2">✓</span>
+                  <span class="font-bold">Frases completas com contexto</span>
+                </li>
+                <li class="flex items-center">
+                  <span class="text-green-500 text-xl mr-2">✓</span>
+                  <span class="font-bold"
+                    >Suporte a verbos, substantivos e adjetivos</span
+                  >
+                </li>
+                <li class="flex items-center">
+                  <span class="text-green-500 text-xl mr-2">✓</span>
+                  <span class="font-bold">Interface amigável e acessível</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="md:w-1/2 flex justify-center">
+              <div class="bg-white rounded-2xl p-6 shadow-xl max-w-md">
+                <div class="flex mb-6">
+                  <div class="w-3 h-3 rounded-full bg-red-400 mr-2"></div>
+                  <div class="w-3 h-3 rounded-full bg-amber-400 mr-2"></div>
+                  <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                </div>
+
+                <div class="space-y-4">
+                  <div class="flex items-center">
+                    <span class="text-3xl mr-3">🐱</span>
+                    <div class="bg-indigo-100 rounded-lg px-4 py-2">
+                      <span class="font-bold text-gray-800">gato</span>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center">
+                    <span class="text-3xl mr-3">🏃</span>
+                    <div class="bg-indigo-100 rounded-lg px-4 py-2">
+                      <span class="font-bold text-gray-800">correr</span>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center">
+                    <span class="text-3xl mr-3">🏠</span>
+                    <div class="bg-indigo-100 rounded-lg px-4 py-2">
+                      <span class="font-bold text-gray-800">casa</span>
+                    </div>
+                  </div>
+
+                  <div class="pt-4 border-t border-gray-200">
+                    <div class="flex flex-wrap items-end">
+                      <div class="flex flex-col items-center mr-2">
+                        <span class="text-3xl">👦</span>
+                        <span class="text-sm font-bold text-gray-700"
+                          >menino</span
+                        >
+                      </div>
+                      <div class="flex flex-col items-center mr-2">
+                        <span class="text-3xl">🏃</span>
+                        <span class="text-sm font-bold text-gray-700"
+                          >corre</span
+                        >
+                      </div>
+                      <div class="flex flex-col items-center mr-2">
+                        <span class="text-2xl font-bold text-indigo-600"
+                          >+</span
+                        >
+                      </div>
+                      <div class="flex flex-col items-center">
+                        <span class="text-3xl">🚲</span>
+                        <span class="text-sm font-bold text-gray-700"
+                          >bicicleta</span
+                        >
+                      </div>
+                      <div class="ml-2 flex items-end">
+                        <span class="text-2xl font-bold text-indigo-600 mr-2"
+                          >=</span
+                        >
+                        <span class="text-4xl">🚴</span>
+                      </div>
+                    </div>
+                    <p class="text-gray-600 text-sm mt-2">
+                      "menino corre bicicleta" = "andar de bicicleta"
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção Para Quem -->
+    <section
+      id="para-quem"
+      class="py-16 bg-gradient-to-b from-indigo-50 to-white"
+    >
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-black text-indigo-800 mb-4">
+            Para <span class="highlight-word">Quem</span> é o VisuLê?
+          </h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            Desenvolvido para atender diferentes necessidades de aprendizagem em
+            todas as idades.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8 mb-12">
+          <div class="age-group-card kids-card section-card p-8">
+            <div class="flex items-center mb-6">
+              <div class="text-5xl mr-4">🧒</div>
+              <div>
+                <h3 class="text-2xl font-black text-gray-800">Crianças</h3>
+                <p class="text-gray-600">4-12 anos</p>
+              </div>
+            </div>
+            <p class="text-gray-700 mb-6">
+              Ideal para o primeiro contato com a leitura e escrita. As
+              associações visuais facilitam o entendimento das palavras e
+              constroem uma base sólida para a alfabetização.
+            </p>
+            <ul class="space-y-2">
+              <li class="flex items-center">
+                <span class="text-pink-500 mr-2">•</span>
+                <span>Aprendizado lúdico e divertido</span>
+              </li>
+              <li class="flex items-center">
+                <span class="text-pink-500 mr-2">•</span>
+                <span>Desenvolvimento do vocabulário básico</span>
+              </li>
+              <li class="flex items-center">
+                <span class="text-pink-500 mr-2">•</span>
+                <span>Estímulo à curiosidade pela leitura</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="age-group-card teens-card section-card p-8">
+            <div class="flex items-center mb-6">
+              <div class="text-5xl mr-4">🧑</div>
+              <div>
+                <h3 class="text-2xl font-black text-gray-800">Adolescentes</h3>
+                <p class="text-gray-600">13-17 anos</p>
+              </div>
+            </div>
+            <p class="text-gray-700 mb-6">
+              Ajuda na compreensão de textos e no aprendizado de uma segunda
+              língua. A abordagem visual torna o estudo mais dinâmico e menos
+              monótono.
+            </p>
+            <ul class="space-y-2">
+              <li class="flex items-center">
+                <span class="text-blue-500 mr-2">•</span>
+                <span>Reforço escolar de forma engajante</span>
+              </li>
+              <li class="flex items-center">
+                <span class="text-blue-500 mr-2">•</span>
+                <span>Aprendizado de português como segunda língua</span>
+              </li>
+              <li class="flex items-center">
+                <span class="text-blue-500 mr-2">•</span>
+                <span
+                  >Suporte para estudantes com dificuldades de
+                  aprendizagem</span
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="age-group-card adults-card section-card p-8">
+            <div class="flex items-center mb-6">
+              <div class="text-5xl mr-4">👨‍🦳</div>
+              <div>
+                <h3 class="text-2xl font-black text-gray-800">Adultos</h3>
+                <p class="text-gray-600">18+ anos</p>
+              </div>
+            </div>
+            <p class="text-gray-700 mb-6">
+              Para adultos que estão aprendendo a ler ou precisam melhorar suas
+              habilidades de leitura e escrita. A metodologia respeita o ritmo
+              de cada aprendiz.
+            </p>
+            <ul class="space-y-2">
+              <li class="flex items-center">
+                <span class="text-green-500 mr-2">•</span>
+                <span>Alfabetização de jovens e adultos</span>
+              </li>
+              <li class="flex items-center">
+                <span class="text-green-500 mr-2">•</span>
+                <span>Recuperação de anos de escolaridade</span>
+              </li>
+              <li class="flex items-center">
+                <span class="text-green-500 mr-2">•</span>
+                <span>Acessível para diferentes níveis de conhecimento</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <p class="text-2xl font-black text-indigo-800 mb-8">
+            O VisuLê também é recomendado para pessoas com:
+          </p>
+          <div class="flex flex-wrap justify-center gap-6">
+            <div
+              class="flex items-center bg-white rounded-2xl px-6 py-4 shadow-md"
+            >
+              <span class="text-3xl mr-3">🧠</span>
+              <span class="font-bold text-gray-800"
+                >Dificuldades de aprendizagem</span
+              >
+            </div>
+            <div
+              class="flex items-center bg-white rounded-2xl px-6 py-4 shadow-md"
+            >
+              <span class="text-3xl mr-3">🌍</span>
+              <span class="font-bold text-gray-800"
+                >Estudantes de português como segunda língua</span
+              >
+            </div>
+            <div
+              class="flex items-center bg-white rounded-2xl px-6 py-4 shadow-md"
+            >
+              <span class="text-3xl mr-3">👁️</span>
+              <span class="font-bold text-gray-800"
+                >Estilo de aprendizagem visual</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção Ferramenta -->
+    <section id="ferramenta" class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-black text-indigo-800 mb-4">
+            Experimente a <span class="highlight-word">Ferramenta</span>
+          </h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            Conheça nossa ferramenta de alfabetização visual que já ajuda
+            milhares de pessoas a aprenderem a ler.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-12 items-center mb-12">
+          <div>
+            <h3 class="text-3xl font-black text-indigo-800 mb-6">
+              Interface Amigável e Intuitiva
+            </h3>
+            <p class="text-gray-700 mb-6">
+              A ferramenta VisuLê foi desenvolvida com uma interface simples e
+              acessível, parecida com um caderno escolar, para que usuários de
+              todas as idades possam utilizá-la sem dificuldades.
+            </p>
+
+            <ul class="space-y-4 mb-8">
+              <li class="flex items-start">
+                <div class="bg-indigo-100 rounded-lg p-2 mr-4">
+                  <span class="text-indigo-600 text-xl">📝</span>
+                </div>
+                <div>
+                  <h4 class="font-bold text-gray-800">
+                    Digite palavras e frases
+                  </h4>
+                  <p class="text-gray-600">
+                    Escreva qualquer palavra ou frase e veja a transformação
+                    visual
+                  </p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <div class="bg-indigo-100 rounded-lg p-2 mr-4">
+                  <span class="text-indigo-600 text-xl">🎨</span>
+                </div>
+                <div>
+                  <h4 class="font-bold text-gray-800">Visualize com emojis</h4>
+                  <p class="text-gray-600">
+                    Cada palavra é representada por emojis correspondentes
+                  </p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <div class="bg-indigo-100 rounded-lg p-2 mr-4">
+                  <span class="text-indigo-600 text-xl">🖨️</span>
+                </div>
+                <div>
+                  <h4 class="font-bold text-gray-800">Imprima e compartilhe</h4>
+                  <p class="text-gray-600">
+                    Salve ou imprima suas criações para estudar depois
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="flex justify-center">
+            <div class="relative max-w-md">
+              <div
+                class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl p-1 shadow-xl"
+              >
+                <div class="bg-white rounded-2xl p-6">
+                  <div class="flex mb-6">
+                    <div class="w-3 h-3 rounded-full bg-red-400 mr-2"></div>
+                    <div class="w-3 h-3 rounded-full bg-amber-400 mr-2"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                  </div>
+
+                  <div class="mb-6">
+                    <div class="text-center mb-4">
+                      <span class="text-5xl">🐱 + 🏃 + 🏠</span>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl p-4">
+                      <p class="text-center font-bold text-gray-800 text-xl">
+                        gato corre casa
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-gray-700">Histórico:</span>
+                      <button
+                        class="text-sm bg-rose-100 text-rose-600 px-3 py-1 rounded-full font-bold"
+                      >
+                        Limpar
+                      </button>
+                    </div>
+
+                    <div class="space-y-3">
+                      <div class="flex items-center">
+                        <span class="text-2xl mr-3">👦</span>
+                        <div class="flex-1 bg-indigo-50 rounded-lg px-4 py-2">
+                          <span class="font-bold text-gray-800">menino</span>
+                        </div>
+                      </div>
+                      <div class="flex items-center">
+                        <span class="text-2xl mr-3">⚽</span>
+                        <div class="flex-1 bg-indigo-50 rounded-lg px-4 py-2">
+                          <span class="font-bold text-gray-800">bola</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-gray-200">
+                      <div class="flex">
+                        <input
+                          type="text"
+                          placeholder="Digite uma palavra..."
+                          class="flex-1 bg-gray-100 rounded-l-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                          value="eu amo você"
+                        />
+                        <button
+                          class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold px-6 rounded-r-xl"
+                        >
+                          →
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="absolute -bottom-6 -right-6 bg-yellow-400 text-gray-800 font-bold px-6 py-3 rounded-2xl shadow-lg"
+              >
+                Experimente agora!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <a
+            href="notebook.html"
+            class="btn-primary text-white font-bold px-10 py-5 rounded-full text-xl inline-block"
+          >
+            🚀 Acessar Ferramenta Completa
+          </a>
+          <p class="text-gray-600 mt-4">
+            Totalmente gratuito e sem necessidade de cadastro!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção Depoimentos -->
+    <section class="py-16 bg-gradient-to-b from-white to-indigo-50">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-black text-indigo-800 mb-4">
+            O que dizem sobre o <span class="highlight-word">VisuLê</span>
+          </h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            Depoimentos de educadores, pais e alunos que utilizam nossa
+            ferramenta.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="testimonial-card p-8 border-t-indigo-500">
+            <p class="text-gray-700 italic mb-6">
+              "Meus alunos com dificuldades de leitura mostraram um progresso
+              incrível depois que começamos a usar o VisuLê. A associação visual
+              faz toda a diferença!"
+            </p>
+            <div class="flex items-center">
+              <div
+                class="w-12 h-12 rounded-full bg-gradient-to-r from-indigo-400 to-purple-500 flex items-center justify-center text-white font-bold mr-4"
+              >
+                M
+              </div>
+              <div>
+                <h4 class="font-bold text-gray-800">Marcela Santos</h4>
+                <p class="text-gray-600">Professora do 2º ano</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card p-8 border-t-green-500">
+            <p class="text-gray-700 italic mb-6">
+              "Meu filho de 6 anos adora brincar com as palavras no VisuLê. Ele
+              aprendeu a ler várias palavras novas brincando, sem perceber que
+              está estudando."
+            </p>
+            <div class="flex items-center">
+              <div
+                class="w-12 h-12 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 flex items-center justify-center text-white font-bold mr-4"
+              >
+                R
+              </div>
+              <div>
+                <h4 class="font-bold text-gray-800">Ricardo Oliveira</h4>
+                <p class="text-gray-600">Pai de aluno</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card p-8 border-t-pink-500">
+            <p class="text-gray-700 italic mb-6">
+              "Estou aprendendo português como segunda língua e o VisuLê tem
+              sido uma ferramenta essencial para memorizar vocabulário. Os
+              emojis me ajudam a lembrar das palavras."
+            </p>
+            <div class="flex items-center">
+              <div
+                class="w-12 h-12 rounded-full bg-gradient-to-r from-pink-400 to-rose-500 flex items-center justify-center text-white font-bold mr-4"
+              >
+                A
+              </div>
+              <div>
+                <h4 class="font-bold text-gray-800">Ana Rodríguez</h4>
+                <p class="text-gray-600">Estudante de português</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção CTA Final -->
+    <section class="py-16 hero-gradient text-white">
+      <div class="container mx-auto px-4 text-center">
+        <h2 class="text-4xl md:text-5xl font-black mb-6">
+          Pronto para transformar a aprendizagem?
+        </h2>
+        <p class="text-xl mb-10 max-w-2xl mx-auto text-indigo-100">
+          Experimente gratuitamente a ferramenta VisuLê e descubra como aprender
+          a ler pode ser divertido!
+        </p>
+
+        <a
+          href="notebook.html"
+          class="btn-secondary text-white font-bold px-12 py-5 rounded-full text-xl inline-block mb-10"
+        >
+          🚀 Começar Agora - É Grátis!
+        </a>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto">
+          <div class="text-center">
+            <div class="text-3xl font-black mb-2">300+</div>
+            <div class="text-indigo-200">Palavras no dicionário</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-black mb-2">4.8★</div>
+            <div class="text-indigo-200">Avaliação dos usuários</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-black mb-2">100%</div>
+            <div class="text-indigo-200">Gratuito e acessível</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-black mb-2">2K+</div>
+            <div class="text-indigo-200">Pessoas já usaram</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="bg-gray-900 text-white py-12">
+      <div class="container mx-auto px-4">
+        <div
+          class="flex flex-col md:flex-row justify-between items-center mb-8"
+        >
+          <div class="flex items-center mb-6 md:mb-0">
+            <!-- <div
+              class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-xl mr-4"
+            >
+              VL
+            </div> -->
+            <div>
+              <h3 class="text-2xl font-black">VisuLê</h3>
+              <p class="text-gray-400">Alfabetização Visual</p>
+            </div>
+          </div>
+
+          <div class="flex gap-6">
+            <a href="#sobre" class="text-gray-300 hover:text-white font-bold"
+              >Sobre</a
+            >
+            <a
+              href="#como-funciona"
+              class="text-gray-300 hover:text-white font-bold"
+              >Como Funciona</a
+            >
+            <a
+              href="#para-quem"
+              class="text-gray-300 hover:text-white font-bold"
+              >Para Quem</a
+            >
+            <a
+              href="ferramenta.html"
+              class="text-gray-300 hover:text-white font-bold"
+              >Caderno</a
+            >
+          </div>
+        </div>
+
+        <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
+          <p class="mb-2">
+            © 2026 VisuLê - Alfabetização Visual para Todas as Idades. Todos os
+            direitos reservados.
+          </p>
+          <p>
+            Desenvolvido por Pedagogo/Eng. de software Eduardo Borges | Projeto
+            educacional para alfabetização de crianças, surdos e com
+            dificuldades de aprendizagem
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Smooth scroll para links internos
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          const targetId = this.getAttribute("href");
+          if (targetId === "#") return;
+
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: "smooth",
+            });
+          }
+        });
+      });
+
+      // Efeito de digitação no título da demonstração
+      const demoTitle = document.querySelector(".demo-title");
+      if (demoTitle) {
+        const text = demoTitle.textContent;
+        demoTitle.textContent = "";
+
+        let i = 0;
+        const typeWriter = () => {
+          if (i < text.length) {
+            demoTitle.textContent += text.charAt(i);
+            i++;
+            setTimeout(typeWriter, 50);
+          }
+        };
+
+        setTimeout(typeWriter, 1000);
+      }
+    </script>
+  </body>
+</html>
