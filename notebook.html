@@ -549,7 +549,7 @@
         sob: "⬇️",
         e: "➕",
         ou: "↔️",
-        mas: "🔄",
+        mas: "❗",
         porque: "❓",
         pois: "❗",
         do: "➡️",
@@ -675,10 +675,21 @@
         sujo: "💩",
         cheio: "🈵",
         vazio: "🈳",
+
+        //  ========== CONECTIVOS ==========
+        então: "➡️",
+        ou: "🔀",
+        quando: "⏰",
+        se: "🤔",
+        embora: "🌫️",
+        assim: "✨",
+        por_isso: "🎯",
       };
 
       // --- 2. Dicionário de Frases Expandido ---
       const PHRASE_MAP = {
+        // Conectivos 
+         "por isso": "🎯",
         // Cumprimentos
         "bom dia": "🌅 ☀️",
         "boa tarde": "🌇",
@@ -690,7 +701,7 @@
         "até amanhã": "👋",
 
         // Expressões de afeto
-        "eu amo você": "❤️",
+        "eu amo você": "🙋 ❤️ ",
         "eu te amo": "❤️",
         "amo você": "❤️",
         "te amo": "❤️",
@@ -947,7 +958,13 @@
       };
 
       // --- 6. Componente do Teclado Virtual ---
-      const VirtualKeyboard = ({ onKeyPress, fontStyle, onHideKeyboard }) => {
+      const VirtualKeyboard = ({
+        onKeyPress,
+        fontStyle,
+        onHideKeyboard,
+        isMobile,
+        isNarrow,
+      }) => {
         const handleKeyClick = (key) => {
           if (key === "SPACE") {
             onKeyPress(" ");
@@ -960,17 +977,25 @@
           }
         };
 
+        const spaceW = isMobile ? (isNarrow ? 100 : 140) : 200;
+        const specialW = isMobile ? (isNarrow ? 50 : 64) : 80;
+        const normalW = isMobile ? (isNarrow ? 28 : 36) : 44;
+
         return (
-          <div className="virtual-keyboard p-4 mb-4 fade-in">
+          <div className="virtual-keyboard p-3 md:p-4 mb-3 md:mb-4 fade-in">
             <div className="flex justify-between items-center mb-4">
-              <h3 className={`text-xl font-bold text-slate-700 ${fontStyle}`}>
+              <h3
+                className={`text-lg md:text-xl font-bold text-slate-700 ${fontStyle}`}
+              >
                 Teclado Virtual
               </h3>
               <div className="flex items-center gap-2">
-                <div className="text-sm text-slate-500">Toque nas letras</div>
+                <div className="text-xs md:text-sm text-slate-500">
+                  Toque nas letras
+                </div>
                 <button
                   onClick={onHideKeyboard}
-                  className="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-lg font-bold hover:bg-blue-200 transition"
+                  className="text-xs md:text-sm bg-blue-100 text-blue-700 px-2 md:px-3 py-1 rounded-lg font-bold hover:bg-blue-200 transition"
                 >
                   Usar Teclado Físico
                 </button>
@@ -984,7 +1009,7 @@
                     key={keyIndex}
                     onClick={() => handleKeyClick(key)}
                     className={`
-                      keyboard-key mx-1 px-3 py-4 text-xl font-bold
+                      keyboard-key mx-1 px-1 md:px-3 py-2 md:py-4 ${isNarrow ? "text-sm" : "text-base"} md:text-xl font-bold
                       ${fontStyle}
                       ${
                         key === "SPACE"
@@ -999,10 +1024,10 @@
                     style={{
                       minWidth:
                         key === "SPACE"
-                          ? "200px"
+                          ? `${spaceW}px`
                           : key === "ENTER" || key === "BACKSPACE"
-                            ? "80px"
-                            : "44px",
+                            ? `${specialW}px`
+                            : `${normalW}px`,
                     }}
                   >
                     {key === "SPACE"
@@ -1017,7 +1042,7 @@
               </div>
             ))}
 
-            <div className="text-center text-sm text-slate-500 mt-3">
+            <div className="text-center text-xs md:text-sm text-slate-500 mt-2 md:mt-3">
               Digite usando o teclado virtual. Toque nas letras para formar
               palavras.
             </div>
@@ -1111,6 +1136,8 @@
         const [history, setHistory] = useState([]);
         const [inputText, setInputText] = useState("");
         const [showKeyboard, setShowKeyboard] = useState(false);
+        const [isMobile, setIsMobile] = useState(false);
+        const [isNarrow, setIsNarrow] = useState(false);
         const [fontStyle, setFontStyle] = useState("font-normal");
         const [showHelp, setShowHelp] = useState(false);
         const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -1139,6 +1166,27 @@
             }, 1000);
           }
         }, []);
+
+        useEffect(() => {
+          const mq = window.matchMedia("(max-width: 640px)");
+          const handler = (e) => setIsMobile(e.matches);
+          handler(mq);
+          mq.addEventListener("change", handler);
+          return () => mq.removeEventListener("change", handler);
+        }, []);
+
+        useEffect(() => {
+          const mq = window.matchMedia("(max-width: 360px)");
+          const handler = (e) => setIsNarrow(e.matches);
+          handler(mq);
+          mq.addEventListener("change", handler);
+          return () => mq.removeEventListener("change", handler);
+        }, []);
+        useEffect(() => {
+          if (isMobile) {
+            setShowKeyboard(true);
+          }
+        }, [isMobile]);
 
         const handleKeyDown = (e) => {
           if (e.key === "Enter") {
@@ -1211,15 +1259,15 @@
               <div className="container mx-auto px-4 py-3">
                 <div className="flex flex-row justify-between items-center">
                   <div className="flex items-center gap-3">
-                    <div class="w-16 h-16 rounded-xl flex items-center justify-center shadow-md mr-3 overflow-hidden">
+                    <div className="w-16 h-16 rounded-xl flex items-center justify-center shadow-md mr-3 overflow-hidden">
                       <a
                         href="index.html"
-                        class="w-full h-full flex items-center justify-center"
+                        className="w-full h-full flex items-center justify-center"
                       >
                         <img
                           src="img/logo-visule.png"
                           alt="Logo VisuLê"
-                          class="w-full h-full object-cover"
+                          className="w-full h-full object-cover"
                         />
                       </a>
                     </div>
@@ -1421,6 +1469,8 @@
                   onKeyPress={handleKeyboardKey}
                   fontStyle={fontStyle}
                   onHideKeyboard={toggleKeyboard}
+                  isMobile={isMobile}
+                  isNarrow={isNarrow}
                 />
               )}
             </main>
